@@ -1,0 +1,109 @@
+﻿@{
+    ViewData["Title"] = "Search Page";
+}
+
+@model MultipleSearchApp.Models.ProductModel
+<div class="container">
+    <div class="row">
+        <div class="col-md-10">
+            <div id="validationMessage" class="alert alert-danger" style="display: none;"></div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <form id="searchForm">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="ProductName">Product Name:</label>
+                            <input type="text" id="ProductName" name="ProductName" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="Size">Size:</label>
+                            @Html.DropDownList("Size", ViewBag.SizeList, "Select Size", new { @class = "form-select" })
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="Category">Category:</label>
+                            @Html.DropDownList("Category", ViewBag.CategoryList, "Select Category", new { @class = "form-select" })
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="d-block">&nbsp;</label> <!-- Empty label for spacing -->
+                            <button type="button" id="searchButton" class="btn btn-primary">Search</button>
+                            <button type="button" id="resetButton" class="btn btn-secondary ml-2">Reset</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-10">
+            <div id="searchResults" class="mt-4">
+                <!-- Your search results content goes here -->
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#searchButton").click(function () {
+                var productName = $("#ProductName").val();
+                //var size = $("#Size").val();
+                var size = $("select[name='Size']").val();
+                //var category = $("#Category").val();
+                var category = $("select[name='Category']").val();
+
+
+                // Check if at least one field is filled
+                if (!productName && !size && !category) {
+                    // Show the validation message
+                    $("#validationMessage").text("Please enter or select at least one field to search.").show();
+                    return; // Stop the request if no fields are filled
+                } else {
+                    // Hide the validation message if fields are filled
+                    $("#validationMessage").hide();
+                }
+
+
+                $.ajax({
+                    type: "POST",
+                    url: "/Search/SearchResult",
+                    data: {
+                        productName: productName,
+                        size: size,
+                        category: category
+                    },
+                    dataType: "html",
+                    success: function (partialView) {
+
+                        $("#searchResults").html(partialView);
+
+                    },
+                    error: function () {
+                        alert("An error occurred.");
+                    }
+                });
+            });
+
+            $("#resetButton").click(function () {
+                // Clear the form fields
+                $("#searchForm")[0].reset();
+
+                // Clear the search results
+                $("#searchResults").empty();
+            });
+        });
+
+
+    </script>
+}

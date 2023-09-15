@@ -1,0 +1,16 @@
+﻿
+--Create Database DemoSearch
+--select * from tblProduct
+--CREATE PROCEDURE sp_Search
+--    @ProductName NVARCHAR(255),
+--    @Size NVARCHAR(255),
+--    @Category NVARCHAR(255)
+--AS
+--BEGIN
+--    SELECT *
+--    FROM tblProduct
+--    WHERE
+--        (ISNULL(@ProductName, '') = '' OR ProductName LIKE '%' + @ProductName + '%')
+--        AND (ISNULL(@Size, '') = '' OR Size LIKE '%' + @Size + '%')
+--        AND (ISNULL(@Category, '') = '' OR Category LIKE '%' + @Category + '%');
+--END;
